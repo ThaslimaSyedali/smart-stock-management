@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            color: #34495e;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        p, h3 {
+            font-size: 16px;
+            color: #2c3e50;
+            margin: 10px 0;
+            text-align: right;
+        }
+
+        button, a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #219150;
+        }
+
+        a {
+            background-color: #007BFF;
+            color: white;
+            margin-left: 10px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        @media print {
+            button, a {
+                display: none;
+            }
+
+            .receipt-container {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <h1>Purchase Receipt</h1>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Tax (%)</th>
+                <th>Tax Amt</th>
+                <th>Line Total</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.tax_rate }}</td>
+                <td>{{ '%.2f'|format(item.tax) }}</td>
+                <td>{{ '%.2f'|format(item.line_total) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p>Total: {{ '%.2f'|format(total) }}</p>
+        <p>Total Tax: {{ '%.2f'|format(tax_total) }}</p>
+        <h3>Grand Total: {{ '%.2f'|format(grand_total) }}</h3>
+
+        <button onclick="window.print()">Print Receipt</button>
+        <a href="{{ url_for('counter_billing') }}">New Bill</a>
+    </div>
+</body>
+</html>
